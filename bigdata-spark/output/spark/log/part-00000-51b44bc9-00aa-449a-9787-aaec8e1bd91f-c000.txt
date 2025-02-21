@@ -1,0 +1,266 @@
+1 The schema of data before preparation is 
+root
+ |-- transaction_id: string (nullable = true)
+ |-- customer_id: string (nullable = true)
+ |-- card_number: long (nullable = true)
+ |-- timestamp: timestamp (nullable = true)
+ |-- merchant_category: string (nullable = true)
+ |-- merchant_type: string (nullable = true)
+ |-- merchant: string (nullable = true)
+ |-- amount: double (nullable = true)
+ |-- currency: string (nullable = true)
+ |-- country: string (nullable = true)
+ |-- city: string (nullable = true)
+ |-- city_size: string (nullable = true)
+ |-- card_type: string (nullable = true)
+ |-- card_present: boolean (nullable = true)
+ |-- device: string (nullable = true)
+ |-- channel: string (nullable = true)
+ |-- device_fingerprint: string (nullable = true)
+ |-- ip_address: string (nullable = true)
+ |-- distance_from_home: integer (nullable = true)
+ |-- high_risk_merchant: boolean (nullable = true)
+ |-- transaction_hour: integer (nullable = true)
+ |-- weekend_transaction: boolean (nullable = true)
+ |-- velocity_last_hour: string (nullable = true)
+ |-- is_fraud: boolean (nullable = true)
+
+
+2 all columns for 10 first rows ==> record count: 10 
++--------------+-----------+----------------+--------------------------+-----------------+-------------+--------------+---------+--------+---------+------------+---------+---------------+------------+-----------+-------+--------------------------------+---------------+------------------+------------------+----------------+-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
+|transaction_id|customer_id|card_number     |timestamp                 |merchant_category|merchant_type|merchant      |amount   |currency|country  |city        |city_size|card_type      |card_present|device     |channel|device_fingerprint              |ip_address     |distance_from_home|high_risk_merchant|transaction_hour|weekend_transaction|velocity_last_hour                                                                                                                                      |is_fraud|
++--------------+-----------+----------------+--------------------------+-----------------+-------------+--------------+---------+--------+---------+------------+---------+---------------+------------+-----------+-------+--------------------------------+---------------+------------------+------------------+----------------+-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
+|TX_a0ad2a2a   |CUST_72886 |6646734767813109|2024-09-30 02:00:01.03482 |Restaurant       |fast_food    |Taco Bell     |294.87   |GBP     |UK       |Unknown City|medium   |Platinum Credit|false       |iOS App    |mobile |e8e6160445c935fd0001501e4cbac8bc|197.153.60.199 |0                 |false             |0               |false              |{'num_transactions': 1197, 'total_amount': 33498556.080464985, 'unique_merchants': 105, 'unique_countries': 12, 'max_single_amount': 1925480.6324148502}|false   |
+|TX_3599c101   |CUST_70474 |376800864692727 |2024-09-30 02:00:01.764464|Entertainment    |gaming       |Steam         |3368.97  |BRL     |Brazil   |Unknown City|medium   |Platinum Credit|false       |Edge       |web    |a73043a57091e775af37f252b3a32af9|208.123.221.203|1                 |true              |0               |false              |{'num_transactions': 509, 'total_amount': 20114759.055250417, 'unique_merchants': 100, 'unique_countries': 12, 'max_single_amount': 5149117.011434267}  |true    |
+|TX_a9461c6d   |CUST_10715 |5251909460951913|2024-09-30 02:00:02.273762|Grocery          |physical     |Whole Foods   |102582.38|JPY     |Japan    |Unknown City|medium   |Platinum Credit|false       |Firefox    |web    |218864e94ceaa41577d216b149722261|10.194.159.204 |0                 |false             |0               |false              |{'num_transactions': 332, 'total_amount': 39163854.72992601, 'unique_merchants': 97, 'unique_countries': 12, 'max_single_amount': 1852242.1831665323}   |false   |
+|TX_7be21fc4   |CUST_16193 |376079286931183 |2024-09-30 02:00:02.297466|Gas              |major        |Exxon         |630.6    |AUD     |Australia|Unknown City|medium   |Premium Debit  |false       |iOS App    |mobile |70423fa3a1e74d01203cf93b51b9631d|17.230.177.225 |0                 |false             |0               |false              |{'num_transactions': 764, 'total_amount': 22012599.81898404, 'unique_merchants': 105, 'unique_countries': 12, 'max_single_amount': 2055798.460682913}   |false   |
+|TX_150f490b   |CUST_87572 |6172948052178810|2024-09-30 02:00:02.544063|Healthcare       |medical      |Medical Center|724949.27|NGN     |Nigeria  |Unknown City|medium   |Basic Debit    |false       |Chrome     |web    |9880776c7b6038f2af86bd4e18a1b1a4|136.241.219.151|1                 |false             |0               |false              |{'num_transactions': 218, 'total_amount': 4827636.199648165, 'unique_merchants': 88, 'unique_countries': 12, 'max_single_amount': 1157231.252130005}    |true    |
+|TX_7fb62ea6   |CUST_55630 |6771346275824473|2024-09-30 02:00:03.050458|Education        |online       |Coursera      |11.76    |BRL     |Brazil   |Unknown City|medium   |Platinum Credit|false       |Chrome     |web    |f79b73f19703d83fbfc2736f24cb108c|184.56.130.84  |1                 |false             |0               |false              |{'num_transactions': 1130, 'total_amount': 69569641.16535725, 'unique_merchants': 105, 'unique_countries': 12, 'max_single_amount': 5374607.870620787}  |true    |
+|TX_e0d7eb37   |CUST_89147 |371305533183152 |2024-09-30 02:00:03.14944 |Grocery          |online       |Instacart     |2606.19  |BRL     |Brazil   |Unknown City|medium   |Platinum Credit|false       |Android App|mobile |20464622be96fda2c75ee7d3698c004d|163.189.239.227|0                 |false             |0               |false              |{'num_transactions': 1392, 'total_amount': 60777372.89105146, 'unique_merchants': 105, 'unique_countries': 12, 'max_single_amount': 5601532.844658206}  |false   |
+|TX_eb55c2be   |CUST_10150 |5927166525373625|2024-09-30 02:00:06.295911|Travel           |hotels       |Westin        |828.33   |EUR     |Germany  |Unknown City|medium   |Platinum Credit|false       |Edge       |web    |170a1d12ba71772366076fd302fe29ca|122.115.119.11 |0                 |true              |0               |false              |{'num_transactions': 352, 'total_amount': 8690903.098021716, 'unique_merchants': 101, 'unique_countries': 12, 'max_single_amount': 1144374.9551450135}  |false   |
+|TX_eb63010a   |CUST_83143 |5029335992770061|2024-09-30 02:00:06.813965|Healthcare       |medical      |Medical Center|104921.0 |NGN     |Nigeria  |Unknown City|medium   |Premium Debit  |false       |Edge       |web    |44a2dde7b410ab3f71344022d1940d4b|103.121.115.91 |0                 |false             |0               |false              |{'num_transactions': 618, 'total_amount': 78406163.60312784, 'unique_merchants': 105, 'unique_countries': 12, 'max_single_amount': 3924222.8930350402}  |false   |
+|TX_b0cd71e2   |CUST_35022 |4412911822339760|2024-09-30 02:00:07.105592|Retail           |online       |eBay          |51521.84 |MXN     |Mexico   |Unknown City|medium   |Premium Debit  |true        |NFC Payment|pos    |fbff6151bf7ab2d768a4646aad2cc5b2|3.35.80.156    |1                 |false             |0               |false              |{'num_transactions': 723, 'total_amount': 14463622.255731769, 'unique_merchants': 105, 'unique_countries': 12, 'max_single_amount': 949518.6258505383}  |true    |
++--------------+-----------+----------------+--------------------------+-----------------+-------------+--------------+---------+--------+---------+------------+---------+---------------+------------+-----------+-------+--------------------------------+---------------+------------------+------------------+----------------+-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
+
+
+3 how many fraud vs geniune transactions ==> record count: 2 
++--------+-------+
+|is_fraud|count  |
++--------+-------+
+|true    |1494719|
+|false   |5989047|
++--------+-------+
+
+
+4 merchants and their categories and types which fraud is detected with expectation ==> record count: 105 
++-----------------+-------------+---------------------+---------------+--------------+
+|merchant_category|merchant_type|merchant             |high_risk_count|is_fraud_count|
++-----------------+-------------+---------------------+---------------+--------------+
+|Education        |online       |Coursera             |0              |18658         |
+|Education        |online       |MasterClass          |0              |18475         |
+|Education        |online       |Skillshare           |0              |18663         |
+|Education        |online       |Udemy                |0              |18622         |
+|Education        |online       |edX                  |0              |18545         |
+|Education        |supplies     |Barnes & Noble       |0              |30933         |
+|Education        |supplies     |Chegg                |0              |31171         |
+|Education        |supplies     |University Bookstore |0              |31136         |
+|Entertainment    |events       |AMC Theaters         |62291          |12424         |
+|Entertainment    |events       |LiveNation           |62350          |12464         |
+|Entertainment    |events       |Regal Cinemas        |62519          |12361         |
+|Entertainment    |events       |StubHub              |62696          |12710         |
+|Entertainment    |events       |Ticketmaster         |62742          |12566         |
+|Entertainment    |gaming       |Epic Games           |62389          |12416         |
+|Entertainment    |gaming       |Nintendo eShop       |62594          |12458         |
+|Entertainment    |gaming       |PlayStation Store    |61823          |12275         |
+|Entertainment    |gaming       |Steam                |62340          |12439         |
+|Entertainment    |gaming       |Xbox Live            |62338          |12571         |
+|Entertainment    |streaming    |Amazon Prime         |44565          |8894          |
+|Entertainment    |streaming    |Apple Music          |44411          |8922          |
+|Entertainment    |streaming    |Disney+              |44849          |8915          |
+|Entertainment    |streaming    |HBO Max              |44219          |8691          |
+|Entertainment    |streaming    |Hulu                 |44656          |8864          |
+|Entertainment    |streaming    |Netflix              |44473          |8917          |
+|Entertainment    |streaming    |Spotify              |44918          |9003          |
+|Gas              |local        |Highway Gas Stop     |0              |31016         |
+|Gas              |local        |Local Gas Station    |0              |31205         |
+|Gas              |local        |Truck Stop           |0              |31192         |
+|Gas              |major        |BP                   |0              |15726         |
+|Gas              |major        |Chevron              |0              |15440         |
+|Gas              |major        |Exxon                |0              |15596         |
+|Gas              |major        |Mobil                |0              |15511         |
+|Gas              |major        |Shell                |0              |15591         |
+|Gas              |major        |Texaco               |0              |15552         |
+|Grocery          |online       |Amazon Fresh         |0              |23427         |
+|Grocery          |online       |FreshDirect          |0              |23134         |
+|Grocery          |online       |Instacart            |0              |23360         |
+|Grocery          |online       |Walmart Grocery      |0              |23475         |
+|Grocery          |physical     |Aldi                 |0              |13314         |
+|Grocery          |physical     |Food Lion            |0              |13270         |
+|Grocery          |physical     |Kroger               |0              |13402         |
+|Grocery          |physical     |Publix               |0              |13639         |
+|Grocery          |physical     |Safeway              |0              |13439         |
+|Grocery          |physical     |Trader Joe's         |0              |13198         |
+|Grocery          |physical     |Whole Foods          |0              |13329         |
+|Healthcare       |medical      |Lab Corp             |0              |23351         |
+|Healthcare       |medical      |Local Hospital       |0              |23170         |
+|Healthcare       |medical      |Medical Center       |0              |23464         |
+|Healthcare       |medical      |Urgent Care          |0              |23215         |
+|Healthcare       |pharmacy     |CVS Pharmacy         |0              |23508         |
+|Healthcare       |pharmacy     |DuaneReade           |0              |23513         |
+|Healthcare       |pharmacy     |Rite Aid             |0              |23305         |
+|Healthcare       |pharmacy     |Walgreens            |0              |23243         |
+|Restaurant       |casual       |Applebee's           |0              |12351         |
+|Restaurant       |casual       |Chili's              |0              |12355         |
+|Restaurant       |casual       |Olive Garden         |0              |12539         |
+|Restaurant       |casual       |Red Lobster          |0              |12333         |
+|Restaurant       |casual       |TGI Fridays          |0              |12504         |
+|Restaurant       |fast_food    |Burger King          |0              |10504         |
+|Restaurant       |fast_food    |KFC                  |0              |10329         |
+|Restaurant       |fast_food    |McDonald's           |0              |10505         |
+|Restaurant       |fast_food    |Subway               |0              |10527         |
+|Restaurant       |fast_food    |Taco Bell            |0              |10540         |
+|Restaurant       |fast_food    |Wendy's              |0              |10381         |
+|Restaurant       |premium      |Capital Grille       |0              |15427         |
+|Restaurant       |premium      |Morton's             |0              |15637         |
+|Restaurant       |premium      |Nobu                 |0              |15358         |
+|Restaurant       |premium      |Ruth's Chris         |0              |15661         |
+|Retail           |online       |AliExpress           |0              |13302         |
+|Retail           |online       |Amazon               |0              |13139         |
+|Retail           |online       |Etsy                 |0              |13341         |
+|Retail           |online       |Newegg               |0              |13374         |
+|Retail           |online       |Shopify Store        |0              |13179         |
+|Retail           |online       |Wayfair              |0              |13456         |
+|Retail           |online       |eBay                 |0              |13213         |
+|Retail           |physical     |Best Buy             |0              |11767         |
+|Retail           |physical     |Costco               |0              |11677         |
+|Retail           |physical     |Home Depot           |0              |11780         |
+|Retail           |physical     |IKEA                 |0              |11493         |
+|Retail           |physical     |Macy's               |0              |11627         |
+|Retail           |physical     |Nike Store           |0              |11730         |
+|Retail           |physical     |Target               |0              |11728         |
+|Retail           |physical     |Walmart              |0              |11807         |
+|Travel           |airlines     |American Airlines    |38801          |7817          |
+|Travel           |airlines     |Delta                |38935          |7666          |
+|Travel           |airlines     |Emirates             |38623          |7728          |
+|Travel           |airlines     |JetBlue              |38934          |7883          |
+|Travel           |airlines     |Southwest            |38957          |7721          |
+|Travel           |airlines     |United Airlines      |39226          |8005          |
+|Travel           |booking      |Airbnb               |46682          |9407          |
+|Travel           |booking      |Booking.com          |46672          |9378          |
+|Travel           |booking      |Expedia              |46919          |9295          |
+|Travel           |booking      |Hotels.com           |46782          |9377          |
+|Travel           |booking      |Kayak                |46971          |9389          |
+|Travel           |hotels       |Hilton               |39243          |7846          |
+|Travel           |hotels       |Holiday Inn          |38888          |7719          |
+|Travel           |hotels       |Hyatt                |39104          |7793          |
+|Travel           |hotels       |Marriott             |39070          |7840          |
+|Travel           |hotels       |Sheraton             |38954          |7878          |
+|Travel           |hotels       |Westin               |39052          |7666          |
+|Travel           |transport    |Careem               |46852          |9336          |
+|Travel           |transport    |Enterprise Rent-A-Car|46643          |9383          |
+|Travel           |transport    |Hertz                |46801          |9414          |
+|Travel           |transport    |Lyft                 |46981          |9439          |
+|Travel           |transport    |Uber                 |46700          |9497          |
++-----------------+-------------+---------------------+---------------+--------------+
+
+
+5 places where frauds are detected ==> record count: 13 
++---------+---------+--------+--------------+
+|country  |city_size|currency|is_fraud_count|
++---------+---------+--------+--------------+
+|Russia   |medium   |RUB     |299425        |
+|Mexico   |medium   |MXN     |298841        |
+|Brazil   |medium   |BRL     |298629        |
+|Nigeria  |medium   |NGN     |298600        |
+|Australia|medium   |AUD     |37652         |
+|Japan    |medium   |JPY     |37592         |
+|France   |medium   |EUR     |37426         |
+|Singapore|medium   |SGD     |37414         |
+|UK       |medium   |GBP     |37345         |
+|Canada   |medium   |CAD     |37278         |
+|Germany  |medium   |EUR     |37205         |
+|USA      |medium   |USD     |22457         |
+|USA      |large    |USD     |14855         |
++---------+---------+--------+--------------+
+
+
+6 how much fraud amount is detected ==> record count: 12 
++---------+--------+------------------+
+|country  |currency|sum_amount        |
++---------+--------+------------------+
+|Nigeria  |NGN     |138,728,842,683.59|
+|Russia   |RUB     |25,321,122,840.91 |
+|Mexico   |MXN     |6,767,799,466.03  |
+|Japan    |JPY     |4,719,137,393.68  |
+|Brazil   |BRL     |1,683,434,472.50  |
+|Australia|AUD     |57,719,986.45     |
+|Singapore|SGD     |57,080,250.00     |
+|Canada   |CAD     |53,072,063.57     |
+|USA      |USD     |42,058,688.57     |
+|France   |EUR     |36,234,521.29     |
+|Germany  |EUR     |36,019,634.64     |
+|UK       |GBP     |30,619,477.79     |
++---------+--------+------------------+
+
+
+7 on which devices and channels frauds are detected  ==> record count: 9 
++-------+---------------+------+
+|channel|device         |count |
++-------+---------------+------+
+|mobile |Android App    |140844|
+|mobile |iOS App        |140306|
+|pos    |Chip Reader    |217324|
+|pos    |Magnetic Stripe|217204|
+|pos    |NFC Payment    |216519|
+|web    |Chrome         |140087|
+|web    |Edge           |138885|
+|web    |Firefox        |142171|
+|web    |Safari         |141379|
++-------+---------------+------+
+
+
+8 customers with the most fraudulant transactions (limit 10) ==> record count: 10 
++-----------+-----+
+|customer_id|count|
++-----------+-----+
+|CUST_91730 |801  |
+|CUST_24836 |753  |
+|CUST_87928 |751  |
+|CUST_81009 |748  |
+|CUST_77434 |745  |
+|CUST_12255 |739  |
+|CUST_49715 |733  |
+|CUST_88176 |732  |
+|CUST_79625 |731  |
+|CUST_41245 |724  |
++-----------+-----+
+
+
+9 The schema of data after preparation is 
+root
+ |-- customer_id: string (nullable = true)
+ |-- card_number: long (nullable = true)
+ |-- date: integer (nullable = true)
+ |-- time_hour: integer (nullable = true)
+ |-- time_minute: integer (nullable = true)
+ |-- time_second: integer (nullable = true)
+ |-- merchant_category: string (nullable = true)
+ |-- merchant_type: string (nullable = true)
+ |-- merchant: string (nullable = true)
+ |-- amount: double (nullable = true)
+ |-- currency: string (nullable = true)
+ |-- country: string (nullable = true)
+ |-- city: string (nullable = true)
+ |-- city_size: string (nullable = true)
+ |-- card_type: string (nullable = true)
+ |-- card_present: integer (nullable = true)
+ |-- device: string (nullable = true)
+ |-- channel: string (nullable = true)
+ |-- distance_from_home: integer (nullable = true)
+ |-- high_risk_merchant: integer (nullable = true)
+ |-- transaction_hour: integer (nullable = true)
+ |-- weekend_transaction: integer (nullable = true)
+ |-- is_fraud: integer (nullable = true)
+
+
+

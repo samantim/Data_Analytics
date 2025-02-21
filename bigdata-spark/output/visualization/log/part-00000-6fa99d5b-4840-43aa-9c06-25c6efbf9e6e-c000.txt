@@ -1,0 +1,28 @@
+1 The schema of processed data is 
+root
+ |-- customer_id: string (nullable = true)
+ |-- card_number: long (nullable = true)
+ |-- date: integer (nullable = true)
+ |-- time_hour: integer (nullable = true)
+ |-- time_minute: integer (nullable = true)
+ |-- time_second: integer (nullable = true)
+ |-- merchant_category: string (nullable = true)
+ |-- merchant_type: string (nullable = true)
+ |-- merchant: string (nullable = true)
+ |-- amount: double (nullable = true)
+ |-- currency: string (nullable = true)
+ |-- country: string (nullable = true)
+ |-- city: string (nullable = true)
+ |-- city_size: string (nullable = true)
+ |-- card_type: string (nullable = true)
+ |-- card_present: integer (nullable = true)
+ |-- device: string (nullable = true)
+ |-- channel: string (nullable = true)
+ |-- distance_from_home: integer (nullable = true)
+ |-- high_risk_merchant: integer (nullable = true)
+ |-- transaction_hour: integer (nullable = true)
+ |-- weekend_transaction: integer (nullable = true)
+ |-- is_fraud: integer (nullable = true)
+
+
+

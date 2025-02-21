@@ -1,0 +1,220 @@
+1 The schema of data before preparation is 
+root
+ |-- transaction_id: string (nullable = true)
+ |-- customer_id: string (nullable = true)
+ |-- card_number: long (nullable = true)
+ |-- timestamp: timestamp (nullable = true)
+ |-- merchant_category: string (nullable = true)
+ |-- merchant_type: string (nullable = true)
+ |-- merchant: string (nullable = true)
+ |-- amount: double (nullable = true)
+ |-- currency: string (nullable = true)
+ |-- country: string (nullable = true)
+ |-- city: string (nullable = true)
+ |-- city_size: string (nullable = true)
+ |-- card_type: string (nullable = true)
+ |-- card_present: boolean (nullable = true)
+ |-- device: string (nullable = true)
+ |-- channel: string (nullable = true)
+ |-- device_fingerprint: string (nullable = true)
+ |-- ip_address: string (nullable = true)
+ |-- distance_from_home: integer (nullable = true)
+ |-- high_risk_merchant: boolean (nullable = true)
+ |-- transaction_hour: integer (nullable = true)
+ |-- weekend_transaction: boolean (nullable = true)
+ |-- velocity_last_hour: string (nullable = true)
+ |-- is_fraud: boolean (nullable = true)
+
+
+2 how many fraud vs geniune transactions 
+fraud: 1494719
+genuine: 5989047
+
+3 merchants and their categories and types which fraud is detected with expectation 
+Education-online-Coursera: (0, 18658)
+Education-online-MasterClass: (0, 18475)
+Education-online-Skillshare: (0, 18663)
+Education-online-Udemy: (0, 18622)
+Education-online-edX: (0, 18545)
+Education-supplies-Barnes & Noble: (0, 30933)
+Education-supplies-Chegg: (0, 31171)
+Education-supplies-University Bookstore: (0, 31136)
+Entertainment-events-AMC Theaters: (62291, 12424)
+Entertainment-events-LiveNation: (62350, 12464)
+Entertainment-events-Regal Cinemas: (62519, 12361)
+Entertainment-events-StubHub: (62696, 12710)
+Entertainment-events-Ticketmaster: (62742, 12566)
+Entertainment-gaming-Epic Games: (62389, 12416)
+Entertainment-gaming-Nintendo eShop: (62594, 12458)
+Entertainment-gaming-PlayStation Store: (61823, 12275)
+Entertainment-gaming-Steam: (62340, 12439)
+Entertainment-gaming-Xbox Live: (62338, 12571)
+Entertainment-streaming-Amazon Prime: (44565, 8894)
+Entertainment-streaming-Apple Music: (44411, 8922)
+Entertainment-streaming-Disney+: (44849, 8915)
+Entertainment-streaming-HBO Max: (44219, 8691)
+Entertainment-streaming-Hulu: (44656, 8864)
+Entertainment-streaming-Netflix: (44473, 8917)
+Entertainment-streaming-Spotify: (44918, 9003)
+Gas-local-Highway Gas Stop: (0, 31016)
+Gas-local-Local Gas Station: (0, 31205)
+Gas-local-Truck Stop: (0, 31192)
+Gas-major-BP: (0, 15726)
+Gas-major-Chevron: (0, 15440)
+Gas-major-Exxon: (0, 15596)
+Gas-major-Mobil: (0, 15511)
+Gas-major-Shell: (0, 15591)
+Gas-major-Texaco: (0, 15552)
+Grocery-online-Amazon Fresh: (0, 23427)
+Grocery-online-FreshDirect: (0, 23134)
+Grocery-online-Instacart: (0, 23360)
+Grocery-online-Walmart Grocery: (0, 23475)
+Grocery-physical-Aldi: (0, 13314)
+Grocery-physical-Food Lion: (0, 13270)
+Grocery-physical-Kroger: (0, 13402)
+Grocery-physical-Publix: (0, 13639)
+Grocery-physical-Safeway: (0, 13439)
+Grocery-physical-Trader Joe's: (0, 13198)
+Grocery-physical-Whole Foods: (0, 13329)
+Healthcare-medical-Lab Corp: (0, 23351)
+Healthcare-medical-Local Hospital: (0, 23170)
+Healthcare-medical-Medical Center: (0, 23464)
+Healthcare-medical-Urgent Care: (0, 23215)
+Healthcare-pharmacy-CVS Pharmacy: (0, 23508)
+Healthcare-pharmacy-DuaneReade: (0, 23513)
+Healthcare-pharmacy-Rite Aid: (0, 23305)
+Healthcare-pharmacy-Walgreens: (0, 23243)
+Restaurant-casual-Applebee's: (0, 12351)
+Restaurant-casual-Chili's: (0, 12355)
+Restaurant-casual-Olive Garden: (0, 12539)
+Restaurant-casual-Red Lobster: (0, 12333)
+Restaurant-casual-TGI Fridays: (0, 12504)
+Restaurant-fast_food-Burger King: (0, 10504)
+Restaurant-fast_food-KFC: (0, 10329)
+Restaurant-fast_food-McDonald's: (0, 10505)
+Restaurant-fast_food-Subway: (0, 10527)
+Restaurant-fast_food-Taco Bell: (0, 10540)
+Restaurant-fast_food-Wendy's: (0, 10381)
+Restaurant-premium-Capital Grille: (0, 15427)
+Restaurant-premium-Morton's: (0, 15637)
+Restaurant-premium-Nobu: (0, 15358)
+Restaurant-premium-Ruth's Chris: (0, 15661)
+Retail-online-AliExpress: (0, 13302)
+Retail-online-Amazon: (0, 13139)
+Retail-online-Etsy: (0, 13341)
+Retail-online-Newegg: (0, 13374)
+Retail-online-Shopify Store: (0, 13179)
+Retail-online-Wayfair: (0, 13456)
+Retail-online-eBay: (0, 13213)
+Retail-physical-Best Buy: (0, 11767)
+Retail-physical-Costco: (0, 11677)
+Retail-physical-Home Depot: (0, 11780)
+Retail-physical-IKEA: (0, 11493)
+Retail-physical-Macy's: (0, 11627)
+Retail-physical-Nike Store: (0, 11730)
+Retail-physical-Target: (0, 11728)
+Retail-physical-Walmart: (0, 11807)
+Travel-airlines-American Airlines: (38801, 7817)
+Travel-airlines-Delta: (38935, 7666)
+Travel-airlines-Emirates: (38623, 7728)
+Travel-airlines-JetBlue: (38934, 7883)
+Travel-airlines-Southwest: (38957, 7721)
+Travel-airlines-United Airlines: (39226, 8005)
+Travel-booking-Airbnb: (46682, 9407)
+Travel-booking-Booking.com: (46672, 9378)
+Travel-booking-Expedia: (46919, 9295)
+Travel-booking-Hotels.com: (46782, 9377)
+Travel-booking-Kayak: (46971, 9389)
+Travel-hotels-Hilton: (39243, 7846)
+Travel-hotels-Holiday Inn: (38888, 7719)
+Travel-hotels-Hyatt: (39104, 7793)
+Travel-hotels-Marriott: (39070, 7840)
+Travel-hotels-Sheraton: (38954, 7878)
+Travel-hotels-Westin: (39052, 7666)
+Travel-transport-Careem: (46852, 9336)
+Travel-transport-Enterprise Rent-A-Car: (46643, 9383)
+Travel-transport-Hertz: (46801, 9414)
+Travel-transport-Lyft: (46981, 9439)
+Travel-transport-Uber: (46700, 9497)
+
+4 places where frauds are detected 
+Australia-medium-AUD: 37652
+Brazil-medium-BRL: 298629
+Canada-medium-CAD: 37278
+France-medium-EUR: 37426
+Germany-medium-EUR: 37205
+Japan-medium-JPY: 37592
+Mexico-medium-MXN: 298841
+Nigeria-medium-NGN: 298600
+Russia-medium-RUB: 299425
+Singapore-medium-SGD: 37414
+UK-medium-GBP: 37345
+USA-large-USD: 14855
+USA-medium-USD: 22457
+
+5 how much fraud amount is detected  
+Australia-medium-AUD: 57719986.45000002
+Brazil-medium-BRL: 1683434472.5000012
+Canada-medium-CAD: 53072063.569999985
+France-medium-EUR: 36234521.29
+Germany-medium-EUR: 36019634.64
+Japan-medium-JPY: 4719137393.679998
+Mexico-medium-MXN: 6767799466.030005
+Nigeria-medium-NGN: 138728842683.58994
+Russia-medium-RUB: 25321122840.909985
+Singapore-medium-SGD: 57080250.000000015
+UK-medium-GBP: 30619477.790000007
+USA-large-USD: 16712723.540000001
+USA-medium-USD: 25345965.02999999
+
+6 on which devices and channels frauds are detected 
+mobile-Android App: 140844
+mobile-iOS App: 140306
+pos-Chip Reader: 217324
+pos-Magnetic Stripe: 217204
+pos-NFC Payment: 216519
+web-Chrome: 140087
+web-Edge: 138885
+web-Firefox: 142171
+web-Safari: 141379
+
+7 customers with the most fraudulant transactions (limit 10) 
+CUST_10000: 311
+CUST_10018: 256
+CUST_10022: 366
+CUST_10039: 314
+CUST_10102: 360
+CUST_10109: 258
+CUST_10129: 364
+CUST_10150: 216
+CUST_10161: 241
+CUST_10198: 340
+
+8 The schema of data after preparation is 
+root
+ |-- customer_id: string (nullable = true)
+ |-- card_number: long (nullable = true)
+ |-- date: long (nullable = true)
+ |-- time_hour: long (nullable = true)
+ |-- time_minute: long (nullable = true)
+ |-- time_second: long (nullable = true)
+ |-- merchant_category: string (nullable = true)
+ |-- merchant_type: string (nullable = true)
+ |-- merchant: string (nullable = true)
+ |-- amount: double (nullable = true)
+ |-- currency: string (nullable = true)
+ |-- country: string (nullable = true)
+ |-- city: string (nullable = true)
+ |-- city_size: string (nullable = true)
+ |-- card_type: string (nullable = true)
+ |-- card_present: long (nullable = true)
+ |-- device: string (nullable = true)
+ |-- channel: string (nullable = true)
+ |-- distance_from_home: long (nullable = true)
+ |-- high_risk_merchant: long (nullable = true)
+ |-- transaction_hour: long (nullable = true)
+ |-- weekend_transaction: long (nullable = true)
+ |-- is_fraud: long (nullable = true)
+
+
+

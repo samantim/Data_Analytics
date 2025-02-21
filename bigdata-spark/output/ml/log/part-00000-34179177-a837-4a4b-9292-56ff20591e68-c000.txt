@@ -1,0 +1,67 @@
+1 The schema of processed data is 
+root
+ |-- customer_id: string (nullable = true)
+ |-- card_number: long (nullable = true)
+ |-- date: integer (nullable = true)
+ |-- time_hour: integer (nullable = true)
+ |-- time_minute: integer (nullable = true)
+ |-- time_second: integer (nullable = true)
+ |-- merchant_category: string (nullable = true)
+ |-- merchant_type: string (nullable = true)
+ |-- merchant: string (nullable = true)
+ |-- amount: double (nullable = true)
+ |-- currency: string (nullable = true)
+ |-- country: string (nullable = true)
+ |-- city: string (nullable = true)
+ |-- city_size: string (nullable = true)
+ |-- card_type: string (nullable = true)
+ |-- card_present: integer (nullable = true)
+ |-- device: string (nullable = true)
+ |-- channel: string (nullable = true)
+ |-- distance_from_home: integer (nullable = true)
+ |-- high_risk_merchant: integer (nullable = true)
+ |-- transaction_hour: integer (nullable = true)
+ |-- weekend_transaction: integer (nullable = true)
+ |-- is_fraud: integer (nullable = true)
+
+
+2 LogisticRegression evaluation results 
+3 Area Under ROC 
+0.861603291970814
+4 Area Under PR 
+0.7672879385083545
+5 Accuracy 
+0.923912949058133
+6 Weighted Precision 
+0.9219325822170645
+7 Weighted Recall 
+0.923912949058133
+8 F1 Score 
+0.9223190695940914
+9 LinearSVC evaluation results 
+10 Area Under ROC 
+0.861018401198514
+11 Area Under PR 
+0.7681462278766923
+12 Accuracy 
+0.9239764284363559
+13 Weighted Precision 
+0.9219680640798209
+14 Weighted Recall 
+0.923976428436356
+15 F1 Score 
+0.9223234837220365
+16 RandomForestClassifier evaluation results 
+17 Area Under ROC 
+0.8610466692136874
+18 Area Under PR 
+0.8441567976969866
+19 Accuracy 
+0.9378617071676236
+20 Weighted Precision 
+0.9381531656651967
+21 Weighted Recall 
+0.9378617071676236
+22 F1 Score 
+0.9348057910432201
+
