@@ -34,6 +34,7 @@ __pycache__
 *.doc
 *.docx
 *.csv
+*.json
 
 # OS generated files #
 ######################
