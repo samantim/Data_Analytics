@@ -1,13 +1,20 @@
-from google.cloud import bigquery
-from faker import Faker
+import mysql.connector as mysql
+from google.cloud import bigquery, storage
 import datetime
 import pandas as pd
-import mysql.connector as mysql
+import io
 
 def connect_bigquery():
     # connect to bigquery
     bigquert_connection = bigquery.Client("secret-compass-453715-h4")
     return bigquert_connection
+
+
+def connect_storage():
+    # connect to google cloud storage
+    storage_client = storage.Client()
+    return storage_client
+
 
 def connect_mysql():
     # connect to mysql
@@ -20,18 +27,72 @@ def connect_mysql():
     )
     return mysql_connection
 
-def read_cities(mysql_connection):
-    # read cities from mysql database - the first 20 cities
+
+def read_query_from_mysql(mysql_connection, query_str):
+    # read cities from mysql database
     cursor = mysql_connection.cursor()
-    cursor.execute("SELECT * from cities order by name limit 20")
+    cursor.execute(query_str)
     result = cursor.fetchall()
+
     # convert the result to a pandas dataframe
     df = pd.DataFrame(result, columns=[desc[0] for desc in cursor.description])
+
     cursor.close()
     return df
 
 
-def populate_cities_from_mysql(bigquery_connection, df_cities : pd.DataFrame):
+def read_csv_from_gcs(cloud_storage, bucket_name, file_name):
+    # read a csv file from google cloud storage
+
+    # get the bucket
+    bucket = cloud_storage.bucket(bucket_name)
+
+    # get the blob
+    blob = bucket.blob(file_name)
+
+    # download the blob as a string
+    data = blob.download_as_string()
+
+    # convert the string to a pandas dataframe
+    df = pd.read_csv(io.StringIO(data.decode('utf-8')))
+
+    return df
+
+def write_csv_to_gcs(cloud_storage, bucket_name, file_name, df):
+    # write a pandas dataframe to a csv file in google cloud storage
+
+    # convert the dataframe to a csv string
+    csv_data = df.to_csv(index=False)
+
+    # get the bucket
+    bucket = cloud_storage.bucket(bucket_name)
+
+    # get the blob
+    blob = bucket.blob(file_name)
+
+    # upload the csv string to the blob
+    blob.upload_from_string(csv_data, content_type='text/csv')
+
+
+def calculate_customer_distribution(df_customers : pd.DataFrame, df_cities : pd.DataFrame):
+    # calculate the distribution of each city based on the customers dataframe
+
+    # group the customers by city and count the number of customers in each city
+    df_customer_distribution = df_customers.groupby(by="city").count()["customer_id"]
+
+    # merge the cities dataframe with the customer distribution dataframe
+    df_merged = pd.merge(df_cities, df_customer_distribution, left_on="name", right_on="city", how="left")[["city_id","customer_id"]].rename(columns={"customer_id":"population"})
+
+    # fill the cities without population with 0
+    df_merged.fillna(0, inplace=True)
+
+    # convert the population to integer
+    df_merged["population"] = df_merged["population"].astype(int)
+
+    return df_merged
+
+
+def populate_cities_in_bigquery(bigquery_connection, df_cities : pd.DataFrame):
     # populate cities read from the mysql table in bigquery
 
     # delete all rows from the table
@@ -39,45 +100,69 @@ def populate_cities_from_mysql(bigquery_connection, df_cities : pd.DataFrame):
 
     # insert the cities from the dataframe
     for i in range(df_cities.shape[0]):
-        query_string = f"INSERT INTO `secret-compass-453715-h4.ecommerce.cities` (city_id, name, created_at) VALUES ({i+1}, '{df_cities.loc[i,"name"]}', '{df_cities.loc[i,"created_at"]}')"
-        query = bigquery_connection.query(query_string)   
-    
-    query.result()  # Wait for the query to finish
+        query_string = f"INSERT INTO `secret-compass-453715-h4.ecommerce.cities` (city_id, name, created_at) VALUES ({df_cities.loc[i,"city_id"]}, '{df_cities.loc[i,"name"]}', '{df_cities.loc[i,"created_at"]}')"
+        query = bigquery_connection.query(query_string)
+        # Wait for the query to finish 
+        query.result()
 
-def populate_cities_fakegenerated(bigquery_connection):
-    # populate cities with fake data in the case of generating new data
-    fake = Faker(seed=0)
+
+def populate_customer_distribution_in_bigquery(bigquery_connection, df_customer_distribution : pd.DataFrame):
+    # populate the customer population in bigquery
 
     # delete all rows from the table
-    query = bigquery_connection.query("delete from ecommerce.cities where city_id >= 0")
+    query = bigquery_connection.query("delete from ecommerce.customer_distribution where city_id >= 0")
 
-    # insert the cities from the faker
-    for i in range(10):
-        city_name = fake.city()
-        query_string = f"INSERT INTO `secret-compass-453715-h4.ecommerce.cities` (city_id, name, created_at) VALUES ({i+1}, '{city_name}', '{datetime.datetime.now()}')"
-        query = bigquery_connection.query(query_string)   
-    
-    query.result()  # Wait for the query to finish
+    # insert the cities from the dataframe
+    for i in range(df_customer_distribution.shape[0]):
+        query_string = f"INSERT INTO `secret-compass-453715-h4.ecommerce.customer_distribution` (city_id, population, created_at) VALUES ({df_customer_distribution.loc[i,"city_id"]}, {df_customer_distribution.loc[i,"population"]}, '{datetime.datetime.now()}')"
+        query = bigquery_connection.query(query_string)
+        # Wait for the query to finish 
+        query.result()  
 
 
-def show_cities(bigquery_connection):
-    # show the cities in the bigquery table
-    query = bigquery_connection.query("SELECT * from `secret-compass-453715-h4.ecommerce.cities` order by city_id")
+def read_query_from_bigquery(bigquery_connection, query_str):
+    # read a query from bigquery
+    query = bigquery_connection.query(query_str)
 
+    # convert the result to a pandas dataframe
     df = query.to_dataframe()
-    print(df)
+    return df
+
 
 def main():
+    # =========================================================Extract data from mysql and google cloud storage
     # connect to mysql
     mysql_connection = connect_mysql()
+
     # read cities from mysql
-    df_cities = read_cities(mysql_connection)
+    df_cities = read_query_from_mysql(mysql_connection, "SELECT * from cities")
+
+    cloud_storage = connect_storage()
+
+    # read customers from google cloud storage in the csv format
+    df_customers = read_csv_from_gcs(cloud_storage,"ecommerce_files", "customers/customers.csv")
+
+    # =========================================================Transform data
+    # calculate the distribution of customers in each city
+    df_customer_distribution = calculate_customer_distribution(df_customers, df_cities)
+
+    # =========================================================Load data to bigquery
     # connect to bigquery
-    bigquert_connection = connect_bigquery()    
+    bigquery_connection = connect_bigquery()    
+
     # populate cities in bigquery
-    populate_cities_from_mysql(bigquert_connection, df_cities)
-    # show the cities in bigquery
-    show_cities(bigquert_connection)
+    populate_cities_in_bigquery(bigquery_connection, df_cities)
+
+    populate_customer_distribution_in_bigquery(bigquery_connection, df_customer_distribution)
+    
+    # show customers didtribution in cities
+    df_distribution_in_cities = read_query_from_bigquery(bigquery_connection, "SELECT cities.name as city_name, customer_dist.population \
+                                        from `secret-compass-453715-h4.ecommerce.customer_distribution` as customer_dist \
+                                        left join `secret-compass-453715-h4.ecommerce.cities` as cities on customer_dist.city_id = cities.city_id \
+                                        order by population desc")
+    
+    # write the distribution in cities to google cloud storage
+    write_csv_to_gcs(cloud_storage,"ecommerce_files", "customers/distributions_in_cities.csv", df_distribution_in_cities)
 
 if __name__ == "__main__":
     main()
