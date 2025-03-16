@@ -96,29 +96,30 @@ def populate_cities_in_bigquery(bigquery_connection, df_cities : pd.DataFrame):
     # populate cities read from the mysql table in bigquery
 
     # delete all rows from the table
-    query = bigquery_connection.query("delete from ecommerce.cities where city_id >= 0")
+    bigquery_connection.query("delete from ecommerce.cities where city_id >= 0").result()
 
     # insert the cities from the dataframe
-    for i in range(df_cities.shape[0]):
-        query_string = f"INSERT INTO `secret-compass-453715-h4.ecommerce.cities` (city_id, name, created_at) VALUES ({df_cities.loc[i,"city_id"]}, '{df_cities.loc[i,"name"]}', '{df_cities.loc[i,"created_at"]}')"
-        query = bigquery_connection.query(query_string)
-        # Wait for the query to finish 
-        query.result()
-
+    job_config = bigquery.LoadJobConfig(write_disposition="WRITE_APPEND")
+    table_id = "secret-compass-453715-h4.ecommerce.cities"
+    job = bigquery_connection.load_table_from_dataframe(df_cities, table_id, job_config=job_config)
+    job.result()
+    
 
 def populate_customer_distribution_in_bigquery(bigquery_connection, df_customer_distribution : pd.DataFrame):
     # populate the customer population in bigquery
 
     # delete all rows from the table
-    query = bigquery_connection.query("delete from ecommerce.customer_distribution where city_id >= 0")
+    bigquery_connection.query("delete from ecommerce.customer_distribution where city_id >= 0").result()
+
+    # add the created_at column
+    df_customer_distribution["created_at"] = datetime.datetime.now()
 
     # insert the cities from the dataframe
-    for i in range(df_customer_distribution.shape[0]):
-        query_string = f"INSERT INTO `secret-compass-453715-h4.ecommerce.customer_distribution` (city_id, population, created_at) VALUES ({df_customer_distribution.loc[i,"city_id"]}, {df_customer_distribution.loc[i,"population"]}, '{datetime.datetime.now()}')"
-        query = bigquery_connection.query(query_string)
-        # Wait for the query to finish 
-        query.result()  
-
+    job_config = bigquery.LoadJobConfig(write_disposition="WRITE_APPEND")
+    table_id = "secret-compass-453715-h4.ecommerce.customer_distribution"
+    job = bigquery_connection.load_table_from_dataframe(df_customer_distribution, table_id, job_config=job_config)
+    job.result()
+    
 
 def read_query_from_bigquery(bigquery_connection, query_str):
     # read a query from bigquery
