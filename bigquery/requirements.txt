@@ -1,6 +1,5 @@
 google-cloud-bigquery
 pandas
 db-dtypes
-faker
 mysql-connector-python
 google-cloud-storage

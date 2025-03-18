@@ -22,7 +22,7 @@ def connect_mysql():
         host="localhost",
         port = "3306",
         user = "root",
-        password = "6902",
+        password = "",
         database = "ecommerce"
     )
     return mysql_connection
