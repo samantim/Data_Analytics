@@ -3,6 +3,7 @@
 archived
 env
 __pycache__
+*data*
 
 
 # Compiled source #
