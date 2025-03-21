@@ -2,29 +2,22 @@ version: "3.1"
 
 stories:
 
-- story: happy path
+- story: Greet user
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
+    - intent: greet
+    - action: utter_greet
 
-- story: sad path 1
+- story: User asks for a cryptocurrency price
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
+    - intent: ask_coin_price
+    - action: action_get_coin_price
 
-- story: sad path 2
+- story: User asks for a currency exchange rate
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_goodbye
+    - intent: ask_currency_price
+    - action: action_get_currency_price
+
+- story: User says goodbye
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye

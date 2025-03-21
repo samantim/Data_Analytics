@@ -16,6 +16,7 @@ nlu:
     - goodmorning
     - goodevening
     - good afternoon
+    - Hey bot
 
 - intent: goodbye
   examples: |
@@ -29,63 +30,22 @@ nlu:
     - see you around
     - bye bye
     - see you later
+    - Take care
+    - Bye bot
 
-- intent: affirm
+- intent: ask_coin_price
   examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
+    - What's the price of Bitcoin?
+    - What's the price of ETH?
+    - How much is Dogecoin?
+    - Tell me the current value of shiba.
+    - Price of BTC in USD?
+    - How much is 1 ETH in dollars?
 
-- intent: deny
+- intent: ask_currency_price
   examples: |
-    - no
-    - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
-
-- intent: mood_great
-  examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
-
-- intent: mood_unhappy
-  examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
-
-- intent: bot_challenge
-  examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
+    - What's the exchange rate for EUR to USD?
+    - How much is 1 GBP in USD?
+    - Convert 50 JPY to USD.
+    - Give me the latest USD to IRR rate.
+    - What's the value of CAD in USD?

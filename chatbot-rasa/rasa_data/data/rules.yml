@@ -2,12 +2,22 @@ version: "3.1"
 
 rules:
 
-- rule: Say goodbye anytime the user says goodbye
+- rule: Respond to greetings
   steps:
-  - intent: goodbye
-  - action: utter_goodbye
+    - intent: greet
+    - action: utter_greet
 
-- rule: Say 'I am a bot' anytime the user challenges
+- rule: Respond to goodbye
   steps:
-  - intent: bot_challenge
-  - action: utter_iamabot
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: Fetch cryptocurrency price
+  steps:
+    - intent: ask_coin_price
+    - action: action_get_coin_price
+
+- rule: Fetch currency exchange rate
+  steps:
+    - intent: ask_currency_price
+    - action: action_get_currency_price
