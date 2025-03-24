@@ -1,12 +1,8 @@
-docker ps
-docker rm rasa-bot
-docker pull rasa/rasa:latest
-chmod -R 777 /mnt/Data/projects/Data_Analytics/chatbot-rasa/rasa_data
-docker run -it --name rasa-bot -p 5005:5005 -v /mnt/Data/projects/Data_Analytics/chatbot-rasa/rasa_data:/app rasa/rasa init
-docker stop rasa-bot
-docker rm rasa-bot
-docker run -it --name rasa-bot -p 5005:5005 -v /mnt/Data/projects/Data_Analytics/chatbot-rasa/rasa_data:/app rasa/rasa shell --enable-api --cors "*"
-
-
-
-
+python3.11 -m venv env
+source ./env/bin/activate
+pip install rasa-pro
+export RASA_PRO_LICENSE="your-rasa-pro-license-key"
+rasa init
+rasa run actions
+rasa train
+rasa inspect/shell

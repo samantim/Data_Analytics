@@ -3,6 +3,9 @@
 archived
 env
 __pycache__
+old*
+models
+.rasa
 
 
 # Compiled source #
