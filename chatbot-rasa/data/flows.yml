@@ -1,8 +1,8 @@
 flows:
-  transfer_money:
-    description: Help users send money to friends and family.
+  convert_currency:
+    description: Help users convert currencies.
     steps:
-      - collect: recipient
+      - collect: src_currency
+      - collect: des_currency
       - collect: amount
-        description: the number of US dollars to send
-      - action: utter_transfer_complete
+      - action: action_convert_currency

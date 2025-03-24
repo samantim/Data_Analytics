@@ -3,11 +3,12 @@ from typing import Any, Dict, List, Text
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
+import requests
 
 
-class ActionCheckSufficientFunds(Action):
+class ActionConvertCurrency(Action):
     def name(self) -> Text:
-        return "action_check_sufficient_funds"
+        return "action_convert_currency"
 
     def run(
         self,
@@ -15,9 +16,18 @@ class ActionCheckSufficientFunds(Action):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
-        # hard-coded balance for tutorial purposes. in production this
-        # would be retrieved from a database or an API
-        balance = 1000
-        transfer_amount = tracker.get_slot("amount")
-        has_sufficient_funds = transfer_amount <= balance
-        return [SlotSet("has_sufficient_funds", has_sufficient_funds)]
+        src_currency = tracker.get_slot("src_currency")
+        des_currency = tracker.get_slot("des_currency")
+        amount = tracker.get_slot("amount")
+
+        api_key = "e61686068c8b2aff51c8519f"
+        response = requests.get(f"https://v6.exchangerate-api.com/v6/{api_key}/latest/{src_currency}")
+        data = response.json()
+        conversion_rate = data["conversion_rates"][des_currency]
+
+        converted_amount = amount * conversion_rate
+        dispatcher.utter_message(
+            f"The conversion rate from {src_currency} to {des_currency} is {conversion_rate}. {amount} {src_currency} equals {converted_amount} {des_currency}."
+        )
+        # return [SlotSet("conversion_rate", conversion_rate), SlotSet("converted_amount", converted_amount)]
+        return []

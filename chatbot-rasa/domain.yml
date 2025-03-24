@@ -1,7 +1,14 @@
 version: "3.1"
 
+actions:
+- action_convert_currency
+
 slots:
-  recipient:
+  src_currency:
+    type: text
+    mappings:
+      - type: from_llm
+  des_currency:
     type: text
     mappings:
       - type: from_llm
@@ -11,14 +18,15 @@ slots:
       - type: from_llm
 
 responses:
-  utter_ask_recipient:
-    - text: "Who would you like to send money to?"
+  utter_ask_src_currency:
+    - text: "What currency would you like to convert from?"
+  
+  utter_ask_des_currency:
+    - text: "What currency would you like to convert to?"
 
   utter_ask_amount:
-    - text: "How much money would you like to send?"
+    - text: "How much money would you like to exchange?"
 
-  utter_transfer_complete:
-    - text: "All done. {amount} has been sent to {recipient}."
 
   utter_free_chitchat_response:
     - text: "placeholder"
