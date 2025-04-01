@@ -1,0 +1,26 @@
+version: "3.1"
+
+stories:
+  - story: User asks about programs without specifying type
+    steps:
+      - intent: inquire_programs
+      - action: action_provide_programs
+      - action: utter_ask_program_type
+      - intent: provide_program_type
+      - action: action_provide_programs_based_on_type
+
+  - story: User asks about fees
+    steps:
+      - intent: inquire_fees
+      - action: action_provide_fees
+
+  - story: User asks about admission
+    steps:
+      - intent: inquire_admission
+      - action: action_provide_admission_info
+
+  - story: User asks for contact information
+    steps:
+      - intent: inquire_contact
+      - action: utter_contact_info
+

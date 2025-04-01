@@ -1,0 +1,50 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - bot_challenge
+  - inquire_programs
+  - inquire_fees
+  - inquire_admission
+  - inquire_contact
+  - provide_program_type
+
+slots:
+  program_type:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: program_type
+
+entities:
+  - program_type
+
+
+responses:
+  utter_greet:
+    - text: "Hello! Welcome to BSBI. How can I assist you today?"
+
+  utter_goodbye:
+    - text: "Goodbye! If you need more information, feel free to ask anytime."
+  
+  utter_iamabot:
+    - text: "I am a bot to help you understand BSBI programs, powered by Saman."
+
+  utter_contact_info:
+    - text: "You can contact BSBI at info@berlinsbi.com or visit our website for more details."
+
+  utter_ask_program_type:
+    - text: "Are you interested in a Bachelor's (BSc) or Master's (MSc) program?"
+
+actions:
+  - action_provide_programs
+  - action_provide_programs_based_on_type
+  - action_provide_fees
+  - action_provide_admission_info
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

@@ -1,0 +1,88 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+
+- intent: inquire_programs
+  examples: |
+    - What programs do you offer?
+    - Tell me about the courses at BSBI
+    - Do you have a business degree?
+
+- intent: inquire_fees
+  examples: |
+    - What are the tuition fees?
+    - How much does a master's degree cost?
+    - What is the fee for a bachelor's in marketing?
+
+- intent: inquire_admission
+  examples: |
+    - How do I apply?
+    - What are the admission requirements?
+    - What is the application process?
+
+- intent: inquire_contact
+  examples: |
+    - How can I contact BSBI?
+    - What is the BSBI email?
+    - Where is BSBI located?
+
+- intent: provide_program_type
+  examples: |
+    - I want a [BSc](program_type) program
+    - Do you have an [MSc](program_type) in Marketing?
+    - I'm looking for a [bachelor's](program_type) program
+    - A [master's](program_type) program, please
