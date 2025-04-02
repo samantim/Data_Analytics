@@ -79,10 +79,42 @@ nlu:
     - How can I contact BSBI?
     - What is the BSBI email?
     - Where is BSBI located?
+  
+- intent: inquire_branches
+  examples: |
+    - What branches do you have?
+    - Are you based in Berlin?
+    - Tell me your places.
+    - What cities do you have university in?
+    - Where are BSBI Campuses?
 
 - intent: provide_program_type
   examples: |
     - I want a [BSc](program_type) program
-    - Do you have an [MSc](program_type) in Marketing?
+    - Do you offer [MSc](program_type) courses?
     - I'm looking for a [bachelor's](program_type) program
-    - A [master's](program_type) program, please
+    - A [master's](program_type) degree, please
+    - Do you have an [MSc](program_type) in Marketing?
+    - I want a [master](program_type) degree
+    - I would like to do a [master's degree](program_type)
+
+- lookup: program_type
+  examples: |
+    - BSc
+    - MSc
+    - bachelor
+    - master
+    - undergraduate
+    - postgraduate
+
+- intent: provide_payment_type
+  examples: |
+    - I want to pay [full amount](payment_type)
+    - Can I pay in [installments](payment_type)?
+    - I prefer [full payment](payment_type)
+    - I would like to use [installments](payment_type)
+
+- lookup: payment_type
+  examples: |
+    - full
+    - instalments

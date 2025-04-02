@@ -1,7 +1,7 @@
 version: "3.1"
 
 stories:
-  - story: User asks about programs without specifying type
+  - story: User asks about programs
     steps:
       - intent: inquire_programs
       - action: action_provide_programs
@@ -13,6 +13,9 @@ stories:
     steps:
       - intent: inquire_fees
       - action: action_provide_fees
+      - action: utter_ask_payment_type
+      - intent: provide_payment_type
+      - action: action_provide_fees_based_on_type
 
   - story: User asks about admission
     steps:
@@ -23,4 +26,9 @@ stories:
     steps:
       - intent: inquire_contact
       - action: utter_contact_info
+
+  - story: User asks about branches
+    steps:
+      - intent: inquire_branches
+      - action: action_provide_branches
 

@@ -21,3 +21,15 @@ rules:
   steps:
     - intent: inquire_contact
     - action: utter_contact_info
+
+- rule: Ask for program type
+  steps:
+    - action: utter_ask_program_type
+    - intent: provide_program_type
+    - action: action_provide_programs_based_on_type
+  
+- rule: Ask for payment type
+  steps:
+    - action: utter_ask_payment_type
+    - intent: provide_payment_type
+    - action: action_provide_fees_based_on_type

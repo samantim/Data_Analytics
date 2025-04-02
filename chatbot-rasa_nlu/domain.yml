@@ -10,7 +10,9 @@ intents:
   - inquire_fees
   - inquire_admission
   - inquire_contact
+  - inquire_branches
   - provide_program_type
+  - provide_payment_type
 
 slots:
   program_type:
@@ -18,9 +20,15 @@ slots:
     mappings:
       - type: from_entity
         entity: program_type
+  payment_type:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: payment_type
 
 entities:
   - program_type
+  - payment_type
 
 
 responses:
@@ -38,13 +46,56 @@ responses:
 
   utter_ask_program_type:
     - text: "Are you interested in a Bachelor's (BSc) or Master's (MSc) program?"
+  
+  utter_ask_payment_type:
+    - text: "How would you like to pay? We accept full payment and installments."
 
 actions:
   - action_provide_programs
   - action_provide_programs_based_on_type
   - action_provide_fees
+  - action_provide_fees_based_on_type
   - action_provide_admission_info
+  - action_provide_branches
 
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
+
+synonyms:
+  program_type:
+    # Synonyms for master's programs
+    - master's
+    - master
+    - MSc
+    - master's degree
+    - master's program
+    - postgraduate
+    - post-graduate
+    - grad school
+    - graduate program
+    - master's degree program
+    - M.A.
+    - M.Sc.
+    - M.A degree
+    - MSc degree
+    - master's level
+    - graduate degree
+
+    # Synonyms for bachelor's programs
+    - bachelor's
+    - bachelor
+    - BSc
+    - bachelor's degree
+    - bachelor's program
+    - undergraduate
+    - undergrad program
+    - bachelor program
+    - B.A.
+    - B.Sc.
+    - B.A degree
+    - BSc degree
+    - undergraduate degree
+    - undergrad degree
+    - bachelor's level
+
