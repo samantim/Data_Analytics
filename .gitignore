@@ -6,6 +6,9 @@ __pycache__
 old*
 models
 .rasa
+output
+outputs
+
 
 
 # Compiled source #
@@ -39,6 +42,7 @@ models
 *.csv
 *.json
 *.sql
+log.*
 
 # OS generated files #
 ######################
