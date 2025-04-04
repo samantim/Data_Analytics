@@ -73,6 +73,75 @@ def clean_data(data : pd.DataFrame, logger: Logger) -> pd.DataFrame:
 
     return data
 
+def handle_outlier_values(data : pd.DataFrame, output_folder : str = "output", logger : Logger = None) -> pd.DataFrame:
+    # Distinguish and remove the outliers based on IQR analysis
+    describe = data.describe()
+
+    # Box plot to show outliers
+    plot_box(data=data, output_folder=output_folder, logger=logger)
+
+    # Detecting outliers with IQR method
+    logger.log("Outliers based on IQR method and skewness before handling them:\n")
+
+    outliers_index = {}
+    for col in describe.columns:
+        # acquiring q1 and q3 to establish allowed area
+        q1 = describe.loc["25%", col]
+        q3 = describe.loc["75%", col]
+        iqr = q3 - q1
+        # every value outside of allowed area is distiguished as an outlier
+        outliers = data[col].loc[(data[col] > q3 + 1.5*iqr) | (data[col] < q1 - 1.5*iqr)]
+        logger.log(f"Outliers of Column {col} count: {outliers.count()}  ---  skewness: {data[col].skew()}")
+        # outlier index of each column
+        if not outliers.empty:
+            outliers_index[col] = outliers.index
+
+    # Replace outliers with mode of that columns
+    for col in outliers_index.keys():
+        data.loc[outliers_index[col],col] = data.mode(numeric_only=True).loc[0,col]
+    
+    # Detecting outliers with IQR method after handling them
+    logger.log("\nOutliers based on IQR method and skewness after handling them:\n")
+    
+    outliers_index = {}
+    for col in describe.columns:
+        # acquiring q1 and q3 to establish allowed area
+        q1 = describe.loc["25%", col]
+        q3 = describe.loc["75%", col]
+        iqr = q3 - q1
+        # every value outside of allowed area is distiguished as an outlier
+        outliers = data[col].loc[(data[col] > q3 + 1.5*iqr) | (data[col] < q1 - 1.5*iqr)]
+        logger.log(f"Outliers of Column {col} count: {outliers.count()}  ---  skewness: {data[col].skew()}")
+        # outlier index of each column
+        if not outliers.empty:
+            outliers_index[col] = outliers.index
+
+    return data
+
+def plot_box(data : pd.DataFrame, suffix : str = "", output_folder : str = "output", logger : Logger = None):
+    # Boxplots of input of dataset (features) to show outliers
+    # set the figure resolution and dpi
+    fig = plt.figure(figsize=(16, 9), dpi=600)
+
+    # Distinguish and remove the outliers based on IQR analysis
+    describe = data.describe()
+    row_count = 1
+    col_count = len(describe.columns)
+
+    i = 1
+    for col in describe.columns:
+        # Creating inputs subplots
+        plt.subplot(row_count, col_count, i)
+        sns.boxplot(data[col])
+        plt.title(f"{col} (input)")
+        i += 1
+
+    # setup the layout to fit in the figure
+    plt.tight_layout(pad=1, h_pad=0.5, w_pad=0.5) 
+    # Save the file with proper dpi
+    plt.savefig(fname=f"{output_folder}/input_outliers{('_' if suffix else '') + suffix}.png", format="png", dpi = fig.dpi)
+
+
 @show_elapsed_time
 def visualize_data(data : pd.DataFrame):
     # Data visualization function
@@ -142,6 +211,17 @@ def visualize_data(data : pd.DataFrame):
     plt.savefig(fname="outputs/plots/service_rating_histogram.png", format="png", dpi=fig.dpi)
     plt.clf()
 
+def plot_correlation(data : pd.DataFrame, suffix : str = "", output_folder : str = "output", logger : Logger = None):
+    # Extract correlatoin between features themselves and also with label plus plot their heatmap
+    # set the figure resolution and dpi
+    fig = plt.figure(figsize=(16, 9), dpi=600)
+    correlations = data.drop(columns=["Platform", "Product_Category"]).corr()
+    logger.log(f"correlations of features:\n{correlations}")
+    sns.heatmap(correlations,annot=True)
+    # Save the file with proper dpi
+    plt.savefig(fname=f"{output_folder}/correlations{('_' if suffix else '') + suffix}.png", format="png", dpi = fig.dpi)
+   
+
 def main():
     # Initialize the logger
     logger = Logger()
@@ -152,11 +232,17 @@ def main():
     # explore the data before cleaning
     data_exploration(data, "Before Cleaning" , logger)
 
+    # Handle outlier values
+    data = handle_outlier_values(data, output_folder="outputs/plots", logger=logger)
+
     # Clean the data
-    clean_data(data, logger)
+    data = clean_data(data, logger)
 
     # explore the data after cleaning
     data_exploration(data, "After Cleaning" , logger)
+
+    # Plot the correlation between features
+    plot_correlation(data, suffix="after_cleaning", output_folder="outputs/plots", logger=logger)
 
     # Visualize the data
     visualize_data(data)
@@ -165,3 +251,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
