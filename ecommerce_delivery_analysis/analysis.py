@@ -1,3 +1,6 @@
+# Here is the code for the analysis of the ecommerce delivery data
+# The code is divided into different functions for better readability and maintainability
+# The code uses the following libraries:
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,12 +10,16 @@ from sklearn.preprocessing import LabelEncoder
 
 @show_elapsed_time
 def read_data(path : str) -> pd.DataFrame:
-    # Read the data
+    # Read the data from the csv file
+    # and return the data as a pandas dataframe
     data = pd.read_csv(path)
     return data
 
 @show_elapsed_time
 def data_exploration(data : pd.DataFrame, suffix_msg : str, logger: Logger):
+    # Data exploration function (EDA)
+    # This function takes the data as input and performs the following operations
+
     # Log the data exploration
     logger.log(f"Data Exploratory Analysis {suffix_msg}:\n")
 
@@ -39,13 +46,16 @@ def data_exploration(data : pd.DataFrame, suffix_msg : str, logger: Logger):
 
 @show_elapsed_time
 def clean_data(data : pd.DataFrame, logger: Logger) -> pd.DataFrame:
+    # Data cleaning function
+    # This function takes the data as input and performs the following operations
+
     # Drop the missing values
     data.dropna(inplace=True)
 
     # Drop the duplicates
     data.drop_duplicates(inplace=True)
 
-    # encode the categorical columns
+    # encode the categorical columns (convert them to numerical values)
     le = LabelEncoder()
     data["Delivery Delay"] = le.fit_transform(data["Delivery Delay"])
     data["Refund Requested"] = le.fit_transform(data["Refund Requested"])
@@ -65,17 +75,21 @@ def clean_data(data : pd.DataFrame, logger: Logger) -> pd.DataFrame:
 
 @show_elapsed_time
 def visualize_data(data : pd.DataFrame):
-    # Visualize the data
+    # Data visualization function
+    # This function takes the data as input and performs the following operations using matplotlib and seaborn
+
+    # Create the figure and set the size and dpi
     fig = plt.figure(figsize=(16,9), dpi=600)
 
-    # pairplot
+    # pairplot which shows the distribution of each feature and the relationship between each pair of features
     sns.pairplot(data)
     plt.savefig(fname="outputs/plots/pairplot.png", format="png", dpi=fig.dpi)
     plt.clf()
 
-    # Bar plot of order value of each product category
-    data_grouped = data.groupby("Product_Category").sum(numeric_only=True)
-    sns.barplot(data=data_grouped, x="Product_Category", y="Order_Value")
+    # Pie chart of order value of each product category 
+    # Group the data by product category and sum the order value
+    data_grouped = data.groupby("Product_Category").sum(numeric_only=True).reset_index()
+    plt.pie(x=data_grouped["Order_Value"], labels=data_grouped["Product_Category"])
     plt.xlabel("Product_Category")
     plt.ylabel("Order Value")
     plt.title("Order Value of each Product Category")
@@ -91,16 +105,18 @@ def visualize_data(data : pd.DataFrame):
     plt.clf()
 
     # Bar plot of delivery delay of each platform
-    data_grouped = data.groupby("Platform").sum(numeric_only=True)
+    # Group the data by platform and sum the delivery delay
+    data_grouped = data.groupby("Platform").sum(numeric_only=True).reset_index()
     sns.barplot(data=data_grouped, x="Platform", y="Delivery_Delay")
     plt.xlabel("Platform")
     plt.ylabel("Delivery Delay")
     plt.title("Delivery Delay of each Platform")
-    plt.savefig(fname="outputs/plots/order_value_of_each_platform.png", format="png", dpi=fig.dpi)
+    plt.savefig(fname="outputs/plots/delivery_delay_of_each_platform.png", format="png", dpi=fig.dpi)
     plt.clf()
 
-    # Bar plot of Average Service_Rating of each product category
-    data_grouped = data.groupby("Product_Category").mean(numeric_only=True)
+    # Bar plot of Average Service Rating of each product category
+    # Group the data by product category and mean of service rating
+    data_grouped = data.groupby("Product_Category").mean(numeric_only=True).reset_index()
     sns.barplot(data=data_grouped, x="Product_Category", y="Service_Rating")
     plt.xlabel("Product_Category")
     plt.ylabel("Service Rating")
@@ -109,12 +125,21 @@ def visualize_data(data : pd.DataFrame):
     plt.clf()
 
     # Bar plot of Average Service_Rating of each Platform
-    data_grouped = data.groupby("Platform").mean(numeric_only=True)
+    # Group the data by platform and mean of service rating
+    data_grouped = data.groupby("Platform").mean(numeric_only=True).reset_index()
     sns.barplot(data=data_grouped, x="Platform", y="Service_Rating")
     plt.xlabel("Platform")
     plt.ylabel("Service Rating")
     plt.title("Average Service Rating of each Platform")
     plt.savefig(fname="outputs/plots/average_service_rating_of_each_platform.png", format="png", dpi=fig.dpi)
+    plt.clf()
+
+    # Histogram of Service Rating
+    sns.histplot(data=data, x="Service_Rating",kde=True)
+    plt.xlabel("Service Rating")
+    plt.ylabel("Rating Count")
+    plt.title("Service Rating Distribution")
+    plt.savefig(fname="outputs/plots/service_rating_histogram.png", format="png", dpi=fig.dpi)
     plt.clf()
 
 def main():
