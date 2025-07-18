@@ -1,12 +1,14 @@
-from statistics import correlation
 import pandas as pd
-import numpy as np
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, classification_report
 import matplotlib.pyplot as plt
 import seaborn as sns
 import logging
 from os import path
 
+# Directory to store all visualizations
 visualization_dir = "visualizations"
 
 def load_data(path : str) -> pd.DataFrame:
@@ -53,11 +55,15 @@ def preprocess_data(data : pd.DataFrame) -> pd.DataFrame:
     for col in data.select_dtypes(include=["object", "bool"]).drop(columns=["FullName", "ReturnReason"]).columns:
         data[col + "_encoded"] = le.fit_transform(data[col])
 
+    # Standard Scaling some columns
+    for col in ["Age", "CreditScore", "MonthlyIncome", "Price", "Cost"]:
+        ss = StandardScaler()
+        data[col] = ss.fit_transform(data[[col]])
+
     return data
 
 
 def eda(data : pd.DataFrame):
-
     # Log the first 5 rows of the dataset
     logging.info(f"The first 5 rows of the data is:\n{data.head(5)}")
 
@@ -79,11 +85,11 @@ def eda(data : pd.DataFrame):
     # Setup the layout to fit in the figure
     plt.tight_layout(pad=1, h_pad=0.5, w_pad=0.5)
 
-    # heat map of coorrelations
-    sns.heatmap(correlations)
+    # heat map of correlations
+    sns.heatmap(correlations, annot=True, fmt="0.2g", cmap="Blues")
     # Save the file with proper dpi
     file_name = path.join(visualization_dir, f"Correlation_heatmap.png")
-    plt.savefig(fname=file_name, format="png", dpi=fig.dpi)
+    plt.savefig(fname=file_name, format="png", dpi=fig.dpi, bbox_inches='tight')
     plt.clf()
 
     for col in described_data.columns:
@@ -102,7 +108,7 @@ def eda(data : pd.DataFrame):
 
         # Save the file with proper dpi
         file_name = path.join(visualization_dir, f"{col}.png")
-        plt.savefig(fname=file_name, format="png", dpi=fig.dpi)
+        plt.savefig(fname=file_name, format="png", dpi=fig.dpi, bbox_inches='tight')
 
         plt.clf()
     
@@ -110,10 +116,45 @@ def eda(data : pd.DataFrame):
     sns.pairplot(data)
     # Save the file with proper dpi
     file_name = path.join(visualization_dir, f"PairPlot.png")
-    plt.savefig(fname=file_name, format="png", dpi=fig.dpi)
+    plt.savefig(fname=file_name, format="png", dpi=fig.dpi, bbox_inches='tight')
     plt.clf()
 
     plt.close()
+
+def classification(data : pd.DataFrame):
+    # Create features and label(target) variable
+    X = data[data.drop(columns=["CustomerID", "OrderConfirmation_encoded", "OrderReturn_encoded"]).describe(include=["int64"]).columns]
+    y = data["OrderConfirmation_encoded"]
+
+    # Split features and label into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train a logistic regression model to classify binary "OrderConfirmation"
+    lr = LogisticRegression(random_state=42, solver="liblinear")
+    lr.fit(X_train, y_train)
+
+    # Predict test set with the trained model
+    y_pred = lr.predict(X_test)
+
+    # Create confusion matrix based on preoicted and real label(target) values
+    conf_matrix = confusion_matrix(y_test, y_pred)
+    logging.info(f"Confusion matrix:\n{conf_matrix}")
+
+    # Create classification report including Accuracy, Precision, Recall, etc.
+    class_report = classification_report(y_test, y_pred)
+    logging.info(f"classification report:\n{class_report}")
+
+    # Set the resolution and quality
+    fig = plt.figure(figsize=(16, 9), dpi=600)
+    # Setup the layout to fit in the figure
+    plt.tight_layout(pad=1, h_pad=0.5, w_pad=0.5)
+
+    # heat map of confusion matrix
+    sns.heatmap(conf_matrix, annot=True, fmt="g", cmap="Blues")
+    # Save the file with proper dpi
+    file_name = path.join(visualization_dir, f"confusion_matrix_heatmap.png")
+    plt.savefig(fname=file_name, format="png", dpi=fig.dpi, bbox_inches='tight')
+    plt.clf()
 
 
 def main():
@@ -128,6 +169,9 @@ def main():
 
     # Exploratory Data Analysis
     eda(data)
+
+    # Apply logistic regression classification on the binary "OrderConfirmation"
+    classification(data)
 
 
 if __name__ == "__main__":
